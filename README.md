@@ -1,8 +1,5 @@
 # Agentic_ClarifyCoder
 
-Agentic Flow with Clarify Coder -- Documentation
-===============================================
-
 Overview
 --------
 
