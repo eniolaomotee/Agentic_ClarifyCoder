@@ -3,7 +3,7 @@
 Overview
 --------
 
-This codebase implements an **agentic flow pipeline** for evaluating problem statements and generating code solutions using LLMs (Gemini in this case).
+This codebase implements an **agentic flow** for evaluating problem statements and generating code solutions using LLMs (Gemini in this case).
 
 The system follows a **multi-round reasoning process**:
 
@@ -11,7 +11,7 @@ The system follows a **multi-round reasoning process**:
 
 2.  **Clarification Phase** → If ambiguities are detected, generate clarifying questions.
 
-3.  **Answer Phase** → Answer the clarifying question using the original problem statement.
+3.  **Answer Phase** → Answer the clarifying question using the original problem statement(an LLM evaluator answers this).
 
 4.  **Refinement Phase** → Generate improved/final code using the clarification.
 
@@ -33,8 +33,6 @@ Components
     -   `problem_statement`
 
     -   `test_case`
-
-    -   (optional) metadata like category.
 
 -   **Process**:
 
@@ -66,10 +64,12 @@ Components
 
 -   **Output**: Dict:
 
-    `{
+    ```
+    {
       "is_good_question": true|false,
       "answer": "<direct answer or empty>"
-    }`
+    }
+    ```
 
 -   **Notes**:
 
@@ -98,8 +98,6 @@ Components
 -   **Output**: Boolean pass/fail or structured test result.
 
 -   **Notes**:
-
-    -   Executes in a sandboxed environment (safe eval recommended).
 
     -   Used to compute **pass@1** and **pass@final** metrics.
 
@@ -142,15 +140,19 @@ Example Flow
 
 1.  **Input Row**:
 
-    `{
+    ```
+    {
       "problem_statement": "Check if in a list of numbers, any two numbers are closer than threshold.",
       "test_case": "has_close_elements([1.0, 2.8, 3.0], 0.3) == True"
-    }`
+    }
+    ```
 
 2.  **Round 1 (Initial)**:
 
-    `def has_close_elements(numbers, threshold):
-        return any(abs(x-y) < threshold for x in numbers for y in numbers)`
+    ```
+    def has_close_elements(numbers, threshold):
+        return any(abs(x-y) < threshold for x in numbers for y in numbers)
+    ```
 
 3.  **Round 2 (Clarification)**:
 
@@ -173,7 +175,8 @@ Example Flow
 Usage
 -----
 
-`import google.generativeai as genai
+```
+import google.generativeai as genai
 from google.colab import userdata
 
 # Configure Gemini
@@ -183,7 +186,8 @@ gemini = genai.GenerativeModel("gemini-2.5-pro")
 # Run on dataset
 for index, row in new_df.iterrows():
     results = run_agentic_flow(row)
-    print(results)`
+    print(results)
+```
 
 * * * * *
 
